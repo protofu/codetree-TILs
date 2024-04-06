@@ -1,9 +1,11 @@
 import sys
-# sys.setrecursionlimit(10**3)
+from collections import deque
+
 input = sys.stdin.readline
 N, M, K = map(int, input().split())
 game = [list(map(int, input().split())) for _ in range(N)]
 count = [[0] * M for _ in range(N)]
+tmp = 100
 
 def attacker(): # 공격자 선정 함수
     tmp = [5001, 0, 0, 1001]
@@ -50,11 +52,18 @@ def reciver(ny, nx): # 공격자 제외 가장 강한 적을 뽑는 함수
 
 def laser(ay, ax, ry, rx, visit):
     dy, dx = [0, 1, 0, -1], [1, 0, -1, 0]
-    if [ay, ax] == [ry, rx]:
-        return True
-    else:
+    q = deque()
+    visit[ay][ax] = True
+    q.append([ax, ay])
+    can_attack = False
+
+    while q:
+        y, x = q.popleft()
+        if [y, x] == [ry, rx]:
+            can_attack = True
+            break
         for i in range(4):
-            ny, nx = ay + dy[i], ax + dx[i]
+            ny, nx = y + dy[i], x + dx[i]
             if 0>ny:
                 ny = N+ny
             elif N<=ny:
@@ -64,13 +73,10 @@ def laser(ay, ax, ry, rx, visit):
             elif N<=nx:
                 nx = N-nx
             if game[ny][nx] != 0 and not visit[ny][nx]:
-                visit[ny][nx] = 1
-                laser(ny, nx, ry, rx, visit)
-                if visit[ry][rx]:
-                    return True
-                else:
-                    visit[ny][nx] = 0
-    return False
+                visit[ny][nx] = True
+                q.append([ny, nx])
+    return can_attack
+
 
 def attack(ay, ax, ry, rx): # 공격 함수(레이저, 포탄)
     visit = [[0] * M for _ in range(N)]
@@ -80,16 +86,19 @@ def attack(ay, ax, ry, rx): # 공격 함수(레이저, 포탄)
     game[ay][ax] += (N+M)
     # 레이저 공격
     if laser(ay, ax, ry, rx, visit):
+        # print("# 레이저 공격!")
+
         game[ry][rx] -= game[ay][ax]
         if game[ry][rx] < 0:
             game[ry][rx] = 0
         for i in range(N):
             for j in range(M):
-                if visit[i][j] and [i, j] != [ry, rx]:
+                if visit[i][j] and [i, j] != [ry, rx] and [i, j] != [ay, ax]:
                     take_attack[i][j] = 1
                     game[i][j] -= game[ay][ax]//2
     # 포탄 공격
     else:
+        # print("# 포탄 공격!")
         game[ry][rx] -= game[ay][ax]
         if game[ry][rx] < 0:
             game[ry][rx] = 0
@@ -122,6 +131,8 @@ def strong():
     return big
 
 for i in range(K):
+    # for j in game:
+    #     print(j)
     canon = attacker() # [공격력, y, x]
     count[canon[1]][canon[2]] = i+1
     # print("공격 캐논", canon)
@@ -129,8 +140,7 @@ for i in range(K):
     # print("공격 대상", enemy)
     attack(canon[1], canon[2], enemy[1], enemy[2])
     # print("---------", i+1, "차 공격 -----------")
-    # for i in game:
-    #     print(i)
+
     cnt = 0
     for i in game:
         for j in i:
@@ -138,5 +148,7 @@ for i in range(K):
                 cnt += 1
     if cnt <= 1:
         break
+# for j in game:
+#     print(j)
 answer = strong()
 print(answer)
