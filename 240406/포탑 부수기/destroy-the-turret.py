@@ -62,16 +62,9 @@ def laser(ay, ax, ry, rx, visit):
         if [y, x] == [ry, rx]:
             can_attack = True
             break
-        for i in range(4):
-            ny, nx = y + dy[i], x + dx[i]
-            if 0>ny:
-                ny = N+ny
-            elif N<=ny:
-                ny = N-ny
-            if 0>nx:
-                nx = N+nx
-            elif N<=nx:
-                nx = N-nx
+        for ix, iy in zip(dx, dy):
+            nx = (x + ix + N) % N
+            ny = (y + iy + M) % M
             if game[ny][nx] != 0 and not visit[ny][nx]:
                 visit[ny][nx] = True
                 q.append([ny, nx])
