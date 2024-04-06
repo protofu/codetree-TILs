@@ -50,45 +50,52 @@ def reciver(ny, nx): # 공격자 제외 가장 강한 적을 뽑는 함수
                         re_tmp = [game[y][x], y, x, count[y][x]]
     return re_tmp
 
-def laser(ay, ax, ry, rx, visit):
+def laser(ay, ax, ry, rx, visit, cnt):
     dy, dx = [0, 1, 0, -1], [1, 0, -1, 0]
-    q = deque()
-    visit[ay][ax] = True
-    q.append([ax, ay])
-    can_attack = False
-
-    while q:
-        y, x = q.popleft()
-        if [y, x] == [ry, rx]:
-            can_attack = True
-            break
-        for ix, iy in zip(dx, dy):
-            nx = (x + ix + N) % N
-            ny = (y + iy + M) % M
+    global tmp
+    global can
+    global go
+    if [ay, ax] == [ry, rx] and tmp > cnt:
+        tmp = cnt
+        can = True
+        go = []
+        for i in range(N):
+            for j in range(M):
+                if visit[i][j]:
+                    go.append([i, j])
+        return can
+    else:
+        for iy, ix in zip(dy, dx):
+            nx = (ax + ix + M) % M
+            ny = (ay + iy + N) % N
             if game[ny][nx] != 0 and not visit[ny][nx]:
-                visit[ny][nx] = True
-                q.append([ny, nx])
-    return can_attack
+                visit[ny][nx] = 1
+                laser(ny, nx, ry, rx, visit, cnt + 1)
+                visit[ny][nx] = 0
+    return can
 
-
+tmp = 100
+go = []
 def attack(ay, ax, ry, rx): # 공격 함수(레이저, 포탄)
     visit = [[0] * M for _ in range(N)]
     take_attack = [[0] * M for _ in range(N)]
     take_attack[ay][ax] = 1
     take_attack[ry][rx] = 1
     game[ay][ax] += (N+M)
+    global tmp
+    global can
+    can = 0
     # 레이저 공격
-    if laser(ay, ax, ry, rx, visit):
+    if laser(ay, ax, ry, rx, visit, 0):
         # print("# 레이저 공격!")
-
         game[ry][rx] -= game[ay][ax]
         if game[ry][rx] < 0:
             game[ry][rx] = 0
-        for i in range(N):
-            for j in range(M):
-                if visit[i][j] and [i, j] != [ry, rx] and [i, j] != [ay, ax]:
-                    take_attack[i][j] = 1
-                    game[i][j] -= game[ay][ax]//2
+        # print(go)
+        for i, j in go:
+            if [i, j] != [ry, rx] and [i, j] != [ay, ax]:
+                take_attack[i][j] = 1
+                game[i][j] -= game[ay][ax]//2
     # 포탄 공격
     else:
         # print("# 포탄 공격!")
