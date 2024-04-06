@@ -1,5 +1,5 @@
 import sys
-sys.setrecursionlimit(10**3)
+# sys.setrecursionlimit(10**3)
 input = sys.stdin.readline
 N, M, K = map(int, input().split())
 game = [list(map(int, input().split())) for _ in range(N)]
