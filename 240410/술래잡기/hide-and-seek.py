@@ -6,7 +6,7 @@ for i in range(m):
     # 1은 좌우(0), 2는 상하(1)
     players[i] = [y-1, x-1, d-1, True]
 dys, dxs = [0, 1, 0, -1], [1, 0, -1, 0]
-opp = {0:2, 1:3, 2:0, 3:1}
+opp = {0:1, 1:0, 2:3, 3:2}
 woods = [[0]*n for _ in range(n)]
 for _ in range(h):
     y, x = tuple(map(int, input().split()))
