@@ -5,7 +5,7 @@ for i in range(m):
     y, x, d = tuple(map(int, input().split()))
     # 1은 좌우(0), 2는 상하(1)
     players[i] = [y-1, x-1, d-1, True]
-dys, dxs = [0, 1, 0, -1], [1, 0, -1, 0]
+dys, dxs = [0, 0, 1, -1], [1, -1, 0, 0]
 opp = {0:1, 1:0, 2:3, 3:2}
 woods = [[0]*n for _ in range(n)]
 for _ in range(h):
@@ -14,7 +14,6 @@ for _ in range(h):
 answer = 0
 nail_y, nail_x = [-1, 0, 1, 0], [0, 1, 0, -1]
 mx_cnt, cnt, flag, val = 1, 0, 0, 1
-
 
 def isAlive(i):
     return players[i][3]
@@ -79,6 +78,7 @@ for w in range(k):
     for i in players:
         y, x, d, alive = players[i]
         # 나무가 없으며 살아있는 경우
+        # print(y, x)
         if woods[y][x]==0 and isAlive(i):
             # y 값이 같고, 3칸 안에 있는 경우
             if ey == y and enemy_x_range(ex, x, ed):
