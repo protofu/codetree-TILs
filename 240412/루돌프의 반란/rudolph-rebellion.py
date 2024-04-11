@@ -82,16 +82,16 @@ def push_santa(start, dir, dys, dxs, val, ey, ex):
             sy, sx, s_stun, s_point = santa[idx]
             # 충돌했다면 거리 업데이트, 범위 체크, 안이라면 q에 넣기
             if (y, x) == (sy, sx):
-                ny, nx = sy + dys[dir] * val, sy + dxs[dir] * val
+                ny, nx = sy + dys[dir], sx + dxs[dir]
                 if in_range(ny, nx):
                     # 루돌프랑 박았다면
-                    if ny==ey and nx==ex:
-                        print("!!!!!", santa[idx])
-                        santa[idx] = [ny, nx, s_stun, s_point+c]
-                        print("!!!!!", santa[idx])
-                    else:
-                        santa[idx] = [ny, nx, s_stun, s_point]
-                        q.append(idx)
+                    # if ny==ey and nx==ex:
+                    #     print("!!!!!", santa[idx])
+                    #     santa[idx] = [ny, nx, s_stun, s_point+c]
+                    #     print("!!!!!", santa[idx])
+                    # else:
+                    santa[idx] = [ny, nx, s_stun, s_point]
+                    q.append(idx)
                 # 범위 밖이라면 탈락
                 else:
                     lose_santa.add(idx)
@@ -136,6 +136,7 @@ for k in range(1, m+1):
         # c만큼 밀려남
         san_y, san_x = san_y+dys[dir]*c, san_x+dxs[dir]*c
         santa[close_santa] = [san_y, san_x, 1, point + c]
+        # print(santa[close_santa])
         now_stun.add(close_santa)
         # 벗어낫다면 탈락
         if not in_range(san_y, san_x):
