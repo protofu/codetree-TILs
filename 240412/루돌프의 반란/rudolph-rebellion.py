@@ -119,6 +119,9 @@ for k in range(1, m+1):
                 elif wy == y and wx < x:
                     close_santa = cur
     # print(k, "턴의 가까운", close_santa)
+    # print(close_santa)
+    if close_santa == 0:
+        continue
     # 루돌프가 이동하는 동작
     san_y, san_x, stun, point = santa[close_santa]
     # 루돌프의 이동
