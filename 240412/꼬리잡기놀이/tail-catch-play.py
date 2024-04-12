@@ -43,29 +43,42 @@ def move():
                 check.add(team[i][j])
                 q=[]
                 q.append((i, j))
-                c = 1
                 while q:
                     y, x = q.pop()
+                    tmp = game[y][x]
                     for dy, dx in zip(dys, dxs):
                         ny, nx = y+dy, x+dx
                         if not in_range(ny, nx): continue
                         if game[ny][nx] == 4:
-                            if game[y][x] == 2:
+                            if tmp == 2:
                                 game[ny][nx] = 2
-                                game[y][x] = 4
-                                ORD[ny][nx] = c
-                                c += 1
-                            else:
+                                if game[y][x] == 2:
+                                    game[y][x] = 4
+                            elif tmp == 1:
                                 game[ny][nx] = 1
                                 game[y][x] = 4
-                                ORD[ny][nx] = c
-                                c += 1
                         elif game[ny][nx] == 3:
                             game[ny][nx] = 4
                             game[y][x] = 3
-                            ORD[y][x] = c
-                            c += 1
                         elif game[ny][nx] == 2:
+                            q.append((ny, nx))
+def oRD():
+    for i in range(n):
+        for j in range(n):
+            if game[i][j] == 1:
+                c = 1
+                ORD[i][j] = c
+                q = []
+                q.append((i, j))
+                while q:
+                    c+=1
+                    y, x = q.pop(0)
+                    for dy, dx in zip(dys, dxs):
+                        ny,nx=y+dy,x+dx
+                        if not in_range(ny, nx): continue
+                        if ORD[ny][nx]:continue
+                        if game[ny][nx]==2 or game[ny][nx]==3:
+                            ORD[ny][nx] = c
                             q.append((ny, nx))
 def ball(round):
     dir, num = (round//n)%4, round%n
@@ -123,6 +136,7 @@ for round in range(k):
     init()
     # 머리 사람을 따라 이동하는 동작
     move()
+    oRD()
     # 공이 던져지는 동작
     ball(round)
 
