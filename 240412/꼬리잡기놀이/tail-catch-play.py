@@ -43,6 +43,7 @@ def move():
                 check.add(team[i][j])
                 q=[]
                 q.append((i, j))
+                flag = 0
                 while q:
                     y, x = q.pop()
                     tmp = game[y][x]
@@ -58,10 +59,23 @@ def move():
                                 game[ny][nx] = 1
                                 game[y][x] = 4
                         elif game[ny][nx] == 3:
-                            game[ny][nx] = 4
-                            game[y][x] = 3
+                            # 모두 연결이 된 경우
+                            if tmp == 1:
+                                flag = 1
+                                game[ny][nx] = 1
+                                game[y][x] = 4
+                            else:
+                                game[ny][nx] = 4
+                                game[y][x] = 3
                         elif game[ny][nx] == 2:
                             q.append((ny, nx))
+                    if flag:
+                        for dy, dx in zip(dys, dxs):
+                            ny, nx = y + dy, x + dx
+                            if not in_range(ny, nx): continue
+                            if game[ny][nx] == 4:
+                                game[ny][nx] = 3
+                                break
 def oRD():
     for i in range(n):
         for j in range(n):
@@ -135,11 +149,18 @@ bfs()
 for round in range(k):
     init()
     # 머리 사람을 따라 이동하는 동작
+    # print("이전")
+    # for i in game:
+    #     print(i)
     move()
+    # print("이후")
+    # for i in game:
+    #     print(i)
     oRD()
     # 공이 던져지는 동작
     ball(round)
 
+# print(score)
 ans = 0
 for i in score:
     ans += score[i]
