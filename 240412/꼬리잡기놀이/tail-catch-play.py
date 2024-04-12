@@ -36,6 +36,7 @@ def in_range(y, x):
     return 0<=y and y<n and 0<=x and x<n
 def move():
     check = set()
+    a, b = -1, -1
     for i in range(n):
         for j in range(n):
             if team[i][j] in check: continue
@@ -62,6 +63,7 @@ def move():
                             # 모두 연결이 된 경우
                             if tmp == 1:
                                 flag = 1
+                                a, b = ny, nx
                                 game[ny][nx] = 1
                                 game[y][x] = 4
                             else:
@@ -69,13 +71,15 @@ def move():
                                 game[y][x] = 3
                         elif game[ny][nx] == 2:
                             q.append((ny, nx))
-                    if flag:
-                        for dy, dx in zip(dys, dxs):
-                            ny, nx = y + dy, x + dx
-                            if not in_range(ny, nx): continue
-                            if game[ny][nx] == 4:
-                                game[ny][nx] = 3
-                                break
+                if flag and game[a][b]==1:
+                    for dy, dx in zip(dys, dxs):
+                        ny, nx = a + dy, b + dx
+                        if not in_range(ny, nx): continue
+                        if game[ny][nx] == 4:
+                            game[ny][nx] = 3
+                            flag=0
+                            break
+
 def oRD():
     for i in range(n):
         for j in range(n):
@@ -91,9 +95,11 @@ def oRD():
                         ny,nx=y+dy,x+dx
                         if not in_range(ny, nx): continue
                         if ORD[ny][nx]:continue
-                        if game[ny][nx]==2 or game[ny][nx]==3:
+                        if game[ny][nx]==2:
                             ORD[ny][nx] = c
                             q.append((ny, nx))
+                        elif game[y][x] == 2 and game[ny][nx]==3:
+                            ORD[ny][nx] = c
 def ball(round):
     dir, num = (round//n)%4, round%n
     dy, dx, val_y, val_x = 0, 0, 0, 0
@@ -111,7 +117,7 @@ def ball(round):
     elif dir == 3:
         dx = n - num - 1
         val_y = 1
-    ry, rx = 0, 0
+    ry, rx = -1, -1
     for i in range(n):
         ny, nx = dy+val_y*i, dx+val_x*i
         if 1<=game[ny][nx]<=3:
@@ -119,6 +125,7 @@ def ball(round):
             score[team[ny][nx]] += ORD[ny][nx] * ORD[ny][nx]
             ry, rx = ny, nx
             break
+    if ry==-1 and rx==-1:return
     q = []
     q.append((ry, rx))
     thr_y, thr_x = 0, 0
@@ -149,16 +156,13 @@ bfs()
 for round in range(k):
     init()
     # 머리 사람을 따라 이동하는 동작
-    # print("이전")
-    # for i in game:
-    #     print(i)
     move()
-    # print("이후")
-    # for i in game:
-    #     print(i)
+
     oRD()
     # 공이 던져지는 동작
     ball(round)
+
+
 
 # print(score)
 ans = 0
