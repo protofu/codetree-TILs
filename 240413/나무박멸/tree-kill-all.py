@@ -94,7 +94,7 @@ def kill_tree():
 
 
 for round in range(m):
-    print(round, "라운드 현황__________________")
+    # print(round, "라운드 현황__________________")
     # 만약 나무가 없다면 끝
     # flag = False
     # for i in range(n):
