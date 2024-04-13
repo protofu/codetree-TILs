@@ -104,3 +104,4 @@ for i in range(k):
 for i in rlt:
     ans += rlt[i]
 print(ans)
+print(ey+1, ex+1)
