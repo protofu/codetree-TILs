@@ -65,13 +65,12 @@ def turn():
     tmp = [[0]*size for _ in range(size)]
     spin = [[0]*size for _ in range(size)]
     # 해당 구역 미로 복사
-    # print(r, r+size)
-    for i in range(r, r+size):
-        for j in range(c, c+size):
-            if maze[i][j]>0:
-                maze[i][j]-=1
-            tmp[i-r][j-c] = maze[i][j]
-            spin[i-r][j-c] = maze[i][j]
+    for a in range(r, r+size):
+        for s in range(c, c+size):
+            if maze[a][s]>0:
+                maze[a][s]-=1
+            tmp[a-r][s-c] = maze[a][s]
+            spin[a-r][s-c] = maze[a][s]
     for i in range(size):
         for j in range(size):
             tmp[j][(size-i-1)%size] = spin[i][j]
@@ -97,6 +96,8 @@ for i in range(k):
     init()
     # 참가자가 이동하는 동작
     move()
+    if not len(alive):
+        break
     # 미로 회전 동작
     turn()
     # 출구 참가자 변환
