@@ -55,7 +55,7 @@ def kill_tree():
                     while times != k:
                         times+=1
                         if not in_range(ny,nx): break
-                        if woods[ny][nx]<0:break
+                        if woods[ny][nx]<=0:break
                         if woods[ny][nx] > 0:
                             cnt += woods[ny][nx]
                         ny, nx = ny+ky, nx+kx
@@ -72,6 +72,7 @@ def kill_tree():
     die_tree += woods[gy][gx]
     woods[gy][gx] = 0
     kill[gy][gx] = c+1
+    # print(gy,gx)
     # 제초제를 뿌리는 동작
     for ky, kx in zip(kys, kxs):
         ny, nx = gy + ky, gx + kx
@@ -79,11 +80,13 @@ def kill_tree():
         while times != k:
             times += 1
             if not in_range(ny, nx): break
-            if woods[ny][nx] < 0: break
-            if woods[ny][nx] >= 0:
+            if woods[ny][nx] <= 0:
+                kill[ny][nx] = c + 1
+                break
+            elif woods[ny][nx] > 0:
                 die_tree+=woods[ny][nx]
-                woods[ny][nx] = 0
                 kill[ny][nx] = c+1
+                woods[ny][nx] = 0
             ny, nx = ny + ky, nx + kx
 
 
@@ -92,14 +95,14 @@ def kill_tree():
 for round in range(m):
     # print(round, "라운드 현황__________________")
     # 만약 나무가 없다면 끝
-    flag = False
-    for i in range(n):
-        for j in range(n):
-            if woods[i][j] > 0:
-                flag = True
-                break
-    if not flag:
-        break
+    # flag = False
+    # for i in range(n):
+    #     for j in range(n):
+    #         if woods[i][j] > 0:
+    #             flag = True
+    #             break
+    # if not flag:
+    #     break
     # empty 리스트 초기화
     init()
     # 나무 성장, 빈칸 세기
