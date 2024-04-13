@@ -55,6 +55,7 @@ def turn():
                 for ej in range(j+1, n):
                     if ei-i != ej-j: continue       # 직사각형은 pass
                     for p in player:
+                        if p not in alive: continue
                         y, x = player[p]
                         if i>y or j>x or ei<y or ej<x: continue
                         if i>ey or j>ex or ei<ey or ej<ex: continue
@@ -81,6 +82,7 @@ def turn():
 def chang():
     global ey, ex
     for i in player:
+        if i not in alive: continue
         y, x = player[i]
         if r<=y and y<r+size and c<=x and x<c+size:
             ny, nx = y-r, x-c
@@ -99,8 +101,6 @@ for i in range(k):
     turn()
     # 출구 참가자 변환
     chang()
-    print(player)
-    print(ey, ex)
 for i in rlt:
     ans += rlt[i]
 print(ans)
