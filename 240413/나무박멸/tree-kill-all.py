@@ -89,7 +89,17 @@ def kill_tree():
 
 
 
-for _ in range(m):
+for round in range(m):
+    # print(round, "라운드 현황__________________")
+    # 만약 나무가 없다면 끝
+    flag = False
+    for i in range(n):
+        for j in range(n):
+            if woods[i][j] > 0:
+                flag = True
+                break
+    if not flag:
+        break
     # empty 리스트 초기화
     init()
     # 나무 성장, 빈칸 세기
@@ -103,10 +113,10 @@ for _ in range(m):
     # for i in woods:
     #     print(i)
     # 제초제 뿌리기 (가장 많이 죽는곳)
+    kill_tree()
     # print("제초제 현황")
     # for i in kill:
     #     print(i)
-    kill_tree()
     # print("제초")
     # for i in woods:
     #     print(i)
