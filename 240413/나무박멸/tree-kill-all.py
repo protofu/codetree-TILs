@@ -8,6 +8,7 @@ die_tree = 0
 dys, dxs = [-1, 0, 1, 0], [0, 1, 0, -1]
 kys, kxs = [-1, -1, 1, 1], [-1, 1, 1, -1]
 def init():
+    global woods_here
     for i in range(n):
         for j in range(n):
             empty[i][j] = 0
