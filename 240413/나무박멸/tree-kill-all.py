@@ -44,7 +44,7 @@ def spread():
                 woods[ny][nx] += woods[i][j]//empty[i][j]
 def kill_tree():
     global die_tree
-    most_kill, gy, gx = 0, -1, -1
+    most_kill, gy, gx = 0, 0, 0
     for i in range(n):
         for j in range(n):
             if woods[i][j] > 0:
@@ -70,30 +70,31 @@ def kill_tree():
                     gy, gx = i, j
     # 해당 자리에 제초제 뿌리기
     die_tree += woods[gy][gx]
-    woods[gy][gx] = 0
     kill[gy][gx] = c+1
-    # print(gy,gx)
-    # 제초제를 뿌리는 동작
-    for ky, kx in zip(kys, kxs):
-        ny, nx = gy + ky, gx + kx
-        times = 0
-        while times != k:
-            times += 1
-            if not in_range(ny, nx): break
-            if woods[ny][nx] <= 0:
-                kill[ny][nx] = c + 1
-                break
-            elif woods[ny][nx] > 0:
-                die_tree+=woods[ny][nx]
-                kill[ny][nx] = c+1
-                woods[ny][nx] = 0
-            ny, nx = ny + ky, nx + kx
+    if woods[gy][gx] > 0:
+        woods[gy][gx] = 0
+        # print(gy,gx)
+        # 제초제를 뿌리는 동작
+        for ky, kx in zip(kys, kxs):
+            ny, nx = gy + ky, gx + kx
+            times = 0
+            while times != k:
+                times += 1
+                if not in_range(ny, nx): break
+                if woods[ny][nx] <= 0:
+                    kill[ny][nx] = c + 1
+                    break
+                elif woods[ny][nx] > 0:
+                    die_tree+=woods[ny][nx]
+                    kill[ny][nx] = c+1
+                    woods[ny][nx] = 0
+                ny, nx = ny + ky, nx + kx
 
 
 
 
 for round in range(m):
-    # print(round, "라운드 현황__________________")
+    print(round, "라운드 현황__________________")
     # 만약 나무가 없다면 끝
     # flag = False
     # for i in range(n):
@@ -125,4 +126,4 @@ for round in range(m):
     #     print(i)
 
 
-print(die_tree)
+    print(die_tree)
