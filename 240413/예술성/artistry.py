@@ -79,7 +79,6 @@ for i in range(1, 5):
                     if (ny, nx) in groups[j]:
                         ans+=point
     # 3회차는 돌릴필요 없음
-    if i == 3: continue
     # 십자모양 90도 돌리기
     cross()
     # 나머지 4칸을 90도 돌리기
