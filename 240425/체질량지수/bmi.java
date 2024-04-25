@@ -7,7 +7,7 @@ public class Main {
         h=sc.nextInt();
         w=sc.nextInt();
         int bmi = (10000*w)/(h*h);
-        System.out.print(bmi);
+        System.out.println(bmi);
         if (bmi>=25) System.out.print("Obesity");
     }
 }
