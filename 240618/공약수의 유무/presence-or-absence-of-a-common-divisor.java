@@ -9,12 +9,11 @@ public class Main {
         b=sc.nextInt();
         boolean check = false;
 
-        if (1920%a==0 && 2880%a==0) {
-            check = true;
-        } else if (1920%b==0 && 2880%b==0) {
-            check = true;
+        for (int i=a;i<=b;i++){
+            if (1920%i==0 && 2880%i==0) {
+                check = true;
+            }
         }
-        
         if (check) {
             System.out.println('1');
         } else {
